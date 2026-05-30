@@ -101,7 +101,7 @@ export const t = {
       btnSending:    'Sending...',
       error:         'Transmission failed. Please try again.',
       footer1:       '© 2025 SANDRO del VALLE',
-      footer2:       'DESIGNED IN LA :: BUILT IN REACT',
+      footer2:       'DESIGNED IN MIAMI :: BUILT IN REACT',
     },
   },
 
@@ -210,7 +210,7 @@ export const t = {
       btnSending:   'Enviando...',
       error:        'Error de transmisión. Por favor intenta de nuevo.',
       footer1:      '© 2025 SANDRO del VALLE',
-      footer2:      'DISEÑADO EN LA :: CONSTRUIDO EN REACT',
+      footer2:      'DISEÑADO EN MIAMI :: CONSTRUIDO EN REACT',
     },
   },
 }
