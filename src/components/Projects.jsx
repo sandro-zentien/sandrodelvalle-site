@@ -48,7 +48,7 @@ const projects = [
     url: null,
     urlLabel: 'Coming Soon',
     status: 'In Development',
-    tags: ['React Native', 'Expo', 'PWA'],
+    tags: ['AI', 'React Native', 'Expo', 'PWA'],
     accent: 'amber',
   },
   {
