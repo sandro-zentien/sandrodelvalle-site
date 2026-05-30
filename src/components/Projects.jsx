@@ -126,6 +126,7 @@ function ProjectCard({ project, delay, tx }) {
   const [ref, inView] = useInView()
   const a = ACCENT[project.accent]
   const card = tx.cards[project.id] || {}
+  const name        = card.name        || project.name
   const tagline     = card.tagline     || project.tagline
   const description = card.description || project.description
   const urlLabel    = card.urlLabel    || project.urlLabel
@@ -150,7 +151,7 @@ function ProjectCard({ project, delay, tx }) {
             {tagline}
           </div>
           <h3 className="font-sans text-2xl font-semibold text-white">
-            {project.name}
+            {name}
           </h3>
         </div>
 
