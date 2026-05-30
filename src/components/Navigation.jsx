@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react'
-
-const links = [
-  { href: '#about', label: 'About' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#blog', label: 'Writing' },
-  { href: '#contact', label: 'Contact' },
-]
+import { useLanguage } from '../context/LanguageContext'
+import { t } from '../translations'
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const { lang, toggle } = useLanguage()
+  const links = t[lang].nav.links
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -38,7 +35,7 @@ export default function Navigation() {
           <span className="status-dot group-hover:scale-110 transition-transform" />
         </a>
 
-        {/* Desktop links */}
+        {/* Desktop links + language toggle */}
         <div className="hidden md:flex items-center gap-8">
           {links.map((link) => (
             <a
@@ -49,30 +46,51 @@ export default function Navigation() {
               {link.label}
             </a>
           ))}
+
+          {/* Language toggle */}
+          <button
+            onClick={toggle}
+            className="font-mono text-[11px] tracking-[0.16em] uppercase border border-electric/25 text-electric/50 hover:text-electric hover:border-electric/60 transition-all duration-200 px-2.5 py-1 rounded-sm"
+            aria-label="Toggle language"
+          >
+            {lang === 'en' ? 'ES' : 'EN'}
+          </button>
         </div>
 
-        {/* Mobile hamburger */}
-        <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
-          onClick={() => setMenuOpen((o) => !o)}
-          aria-label="Toggle menu"
-        >
-          <span
-            className={`block w-5 h-px bg-electric/70 transition-all duration-200 ${
-              menuOpen ? 'rotate-45 translate-y-[7px]' : ''
-            }`}
-          />
-          <span
-            className={`block w-5 h-px bg-electric/70 transition-all duration-200 ${
-              menuOpen ? 'opacity-0' : ''
-            }`}
-          />
-          <span
-            className={`block w-5 h-px bg-electric/70 transition-all duration-200 ${
-              menuOpen ? '-rotate-45 -translate-y-[7px]' : ''
-            }`}
-          />
-        </button>
+        {/* Mobile right side */}
+        <div className="md:hidden flex items-center gap-4">
+          {/* Language toggle mobile */}
+          <button
+            onClick={toggle}
+            className="font-mono text-[10px] tracking-[0.16em] uppercase border border-electric/25 text-electric/50 px-2 py-0.5 rounded-sm"
+            aria-label="Toggle language"
+          >
+            {lang === 'en' ? 'ES' : 'EN'}
+          </button>
+
+          {/* Hamburger */}
+          <button
+            className="flex flex-col gap-1.5 p-2"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="Toggle menu"
+          >
+            <span
+              className={`block w-5 h-px bg-electric/70 transition-all duration-200 ${
+                menuOpen ? 'rotate-45 translate-y-[7px]' : ''
+              }`}
+            />
+            <span
+              className={`block w-5 h-px bg-electric/70 transition-all duration-200 ${
+                menuOpen ? 'opacity-0' : ''
+              }`}
+            />
+            <span
+              className={`block w-5 h-px bg-electric/70 transition-all duration-200 ${
+                menuOpen ? '-rotate-45 -translate-y-[7px]' : ''
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}

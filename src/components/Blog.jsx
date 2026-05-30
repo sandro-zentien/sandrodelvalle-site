@@ -1,25 +1,8 @@
 import { useInView } from '../hooks/useInView'
+import { useLanguage } from '../context/LanguageContext'
+import { t } from '../translations'
 
-const posts = [
-  {
-    id: 1,
-    date: "2025 / 04",
-    title: "The Architecture of Trust: Building Reliable SaaS on Salesforce",
-    excerpt:
-      "What I learned shipping a reliability platform on top of someone else’s platform — and why observability is the first thing you should build.",
-    readTime: "7 min",
-  },
-  {
-    id: 2,
-    date: "2025 / 02",
-    title: "Designing for the Unknown: Lessons from Building TripFlow",
-    excerpt:
-      "Group travel is a UX nightmare. Here’s how I approached collaborative state, real-time sync, and the messy human dynamics of planning trips.",
-    readTime: "5 min",
-  },
-]
-
-function PostCard({ post, delay }) {
+function PostCard({ post, delay, tx }) {
   const [ref, inView] = useInView()
 
   return (
@@ -48,13 +31,13 @@ function PostCard({ post, delay }) {
         </p>
         <div className="flex items-center gap-3">
           <span className="font-mono text-[9px] tracking-[0.15em] text-electric/35 uppercase">
-            {post.readTime} read
+            {post.readTime} {tx.read}
           </span>
           <span className="font-mono text-[9px] tracking-[0.15em] text-electric/25">
             &middot;
           </span>
           <span className="font-mono text-[9px] tracking-[0.15em] text-electric/35 uppercase group-hover:text-electric/60 transition-colors duration-200">
-            Coming Soon
+            {tx.comingSoon}
           </span>
         </div>
       </div>
@@ -77,6 +60,8 @@ function PostCard({ post, delay }) {
 
 export default function Blog() {
   const [tagRef, tagInView] = useInView()
+  const { lang } = useLanguage()
+  const tx = t[lang].blog
 
   return (
     <section id="blog" className="py-28 px-6">
@@ -87,7 +72,7 @@ export default function Blog() {
           className={`section-tag mb-10 fade-up ${tagInView ? "visible" : ""}`}
         >
           <span className="h-px w-6 bg-electric/40" />
-          <span>03 :: Writing</span>
+          <span>{tx.tag}</span>
         </div>
 
         <div
@@ -95,13 +80,13 @@ export default function Blog() {
           style={{ transitionDelay: "60ms" }}
         >
           <h2 className="font-sans text-3xl md:text-4xl font-semibold text-white leading-snug">
-            Thoughts on building.
+            {tx.heading}
           </h2>
         </div>
 
         <div className="flex flex-col gap-4">
-          {posts.map((post, i) => (
-            <PostCard key={post.id} post={post} delay={i * 80} />
+          {tx.posts.map((post, i) => (
+            <PostCard key={post.id} post={post} delay={i * 80} tx={tx} />
           ))}
         </div>
       </div>

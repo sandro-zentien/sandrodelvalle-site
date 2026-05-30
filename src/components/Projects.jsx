@@ -1,4 +1,6 @@
 import { useInView } from '../hooks/useInView'
+import { useLanguage } from '../context/LanguageContext'
+import { t } from '../translations'
 
 const projects = [
   {
@@ -120,9 +122,14 @@ const ACCENT = {
   green:  { card: 'glass-card-green',  hud: 'green',   dot: { background: '#22c55e', boxShadow: '0 0 6px rgba(34,197,94,0.8)'   }, badge: { borderColor: 'rgba(34,197,94,0.25)',   background: 'rgba(34,197,94,0.06)'   }, label: 'rgba(34,197,94,0.55)',   status: 'rgba(34,197,94,0.7)',   tag: { color: 'rgba(34,197,94,0.5)',   borderColor: 'rgba(34,197,94,0.15)',   background: 'rgba(34,197,94,0.04)'   }, link: { text: 'rgba(34,197,94,0.5)',   icon: '#22c55e'   } },
 }
 
-function ProjectCard({ project, delay }) {
+function ProjectCard({ project, delay, tx }) {
   const [ref, inView] = useInView()
   const a = ACCENT[project.accent]
+  const card = tx.cards[project.id] || {}
+  const tagline     = card.tagline     || project.tagline
+  const description = card.description || project.description
+  const urlLabel    = card.urlLabel    || project.urlLabel
+  const statusLabel = tx.statusLabels[project.status] || project.status
 
   return (
     <div
@@ -140,7 +147,7 @@ function ProjectCard({ project, delay }) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="mono-label mb-2" style={{ color: a.label }}>
-            {project.tagline}
+            {tagline}
           </div>
           <h3 className="font-sans text-2xl font-semibold text-white">
             {project.name}
@@ -157,14 +164,14 @@ function ProjectCard({ project, delay }) {
             className="font-mono text-[9px] tracking-[0.15em] uppercase"
             style={{ color: a.status }}
           >
-            {project.status}
+            {statusLabel}
           </span>
         </div>
       </div>
 
       {/* Description */}
       <p className="text-white/50 text-sm leading-relaxed flex-1">
-        {project.description}
+        {description}
       </p>
 
       {/* Tags */}
@@ -193,7 +200,7 @@ function ProjectCard({ project, delay }) {
               className="font-mono text-[10px] tracking-[0.14em] uppercase transition-colors duration-200"
               style={{ color: a.link.text }}
             >
-              {project.urlLabel}
+              {urlLabel}
             </span>
             <svg
               width="12"
@@ -217,7 +224,7 @@ function ProjectCard({ project, delay }) {
             className="font-mono text-[10px] tracking-[0.14em] uppercase"
             style={{ color: a.link.text }}
           >
-            {project.urlLabel}
+            {urlLabel}
           </span>
         )}
       </div>
@@ -227,6 +234,8 @@ function ProjectCard({ project, delay }) {
 
 export default function Projects() {
   const [tagRef, tagInView] = useInView()
+  const { lang } = useLanguage()
+  const tx = t[lang].projects
 
   return (
     <section id="projects" className="py-28 px-6">
@@ -237,18 +246,18 @@ export default function Projects() {
           className={`section-tag mb-10 fade-up ${tagInView ? 'visible' : ''}`}
         >
           <span className="h-px w-6 bg-electric/40" />
-          <span>02 :: Projects</span>
+          <span>{tx.tag}</span>
         </div>
 
         <div className={`mb-8 fade-up ${tagInView ? 'visible' : ''}`} style={{ transitionDelay: '60ms' }}>
           <h2 className="font-sans text-3xl md:text-4xl font-semibold text-white leading-snug">
-            Things I've shipped.
+            {tx.heading}
           </h2>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {projects.map((project, i) => (
-            <ProjectCard key={project.id} project={project} delay={i * 100} />
+            <ProjectCard key={project.id} project={project} delay={i * 100} tx={tx} />
           ))}
         </div>
       </div>

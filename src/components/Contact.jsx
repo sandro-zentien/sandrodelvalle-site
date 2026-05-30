@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useInView } from '../hooks/useInView'
+import { useLanguage } from '../context/LanguageContext'
+import { t } from '../translations'
 
 export default function Contact() {
   const [tagRef, tagInView] = useInView()
@@ -8,6 +10,8 @@ export default function Contact() {
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const { lang } = useLanguage()
+  const tx = t[lang].contact
 
   const handleChange = (e) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
@@ -27,10 +31,10 @@ export default function Contact() {
         setSent(true)
         setForm({ name: '', email: '', message: '' })
       } else {
-        setError('Transmission failed. Please try again.')
+        setError(tx.error)
       }
     } catch {
-      setError('Transmission failed. Please try again.')
+      setError(tx.error)
     } finally {
       setLoading(false)
     }
@@ -45,7 +49,7 @@ export default function Contact() {
           className={`section-tag mb-10 fade-up ${tagInView ? 'visible' : ''}`}
         >
           <span className="h-px w-6 bg-electric/40" />
-          <span>04 :: Contact</span>
+          <span>{tx.tag}</span>
         </div>
 
         <div
@@ -53,11 +57,10 @@ export default function Contact() {
           style={{ transitionDelay: '60ms' }}
         >
           <h2 className="font-sans text-3xl md:text-4xl font-semibold text-white leading-snug mb-3">
-            Let's build something.
+            {tx.heading}
           </h2>
           <p className="text-white/45 text-base max-w-lg">
-            Whether it's a collaboration, an idea, or just a conversation —
-            I'm always open to connecting with interesting people.
+            {tx.sub}
           </p>
         </div>
 
@@ -76,7 +79,7 @@ export default function Contact() {
 
             {/* HUD bar */}
             <div className="flex items-center justify-between mb-7">
-              <span className="mono-label">TRANSMISSION</span>
+              <span className="mono-label">{tx.hudLabel}</span>
               <div className="flex items-center gap-2">
                 <span
                   className={`inline-block w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
@@ -86,7 +89,7 @@ export default function Contact() {
                   }`}
                 />
                 <span className="font-mono text-[9px] tracking-[0.15em] text-electric/45">
-                  {sent ? 'SENT' : 'READY'}
+                  {sent ? tx.statusSent : tx.statusReady}
                 </span>
               </div>
             </div>
@@ -105,7 +108,7 @@ export default function Contact() {
                   </svg>
                 </div>
                 <p className="font-mono text-xs tracking-widest text-electric/60 uppercase">
-                  Message Queued
+                  {tx.successMsg}
                 </p>
               </div>
             ) : (
@@ -113,7 +116,7 @@ export default function Contact() {
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label className="mono-label block mb-2" htmlFor="name">
-                      Name
+                      {tx.labelName}
                     </label>
                     <input
                       id="name"
@@ -122,13 +125,13 @@ export default function Contact() {
                       required
                       value={form.name}
                       onChange={handleChange}
-                      placeholder="// your_name"
+                      placeholder={tx.phName}
                       className="glass-input"
                     />
                   </div>
                   <div>
                     <label className="mono-label block mb-2" htmlFor="email">
-                      Email
+                      {tx.labelEmail}
                     </label>
                     <input
                       id="email"
@@ -137,7 +140,7 @@ export default function Contact() {
                       required
                       value={form.email}
                       onChange={handleChange}
-                      placeholder="// email@domain.io"
+                      placeholder={tx.phEmail}
                       className="glass-input"
                     />
                   </div>
@@ -145,7 +148,7 @@ export default function Contact() {
 
                 <div>
                   <label className="mono-label block mb-2" htmlFor="message">
-                    Message
+                    {tx.labelMessage}
                   </label>
                   <textarea
                     id="message"
@@ -154,7 +157,7 @@ export default function Contact() {
                     rows={5}
                     value={form.message}
                     onChange={handleChange}
-                    placeholder="// what's on your mind?"
+                    placeholder={tx.phMessage}
                     className="glass-input resize-none"
                   />
                 </div>
@@ -166,7 +169,7 @@ export default function Contact() {
                 )}
                 <div className="flex justify-end pt-2">
                   <button type="submit" className="send-btn" disabled={loading}>
-                    {loading ? 'Sending...' : 'Transmit'}
+                    {loading ? tx.btnSending : tx.btnSend}
                   </button>
                 </div>
               </form>
@@ -179,9 +182,9 @@ export default function Contact() {
             style={{ transitionDelay: '180ms' }}
           >
             {[
-              { label: 'GitHub', handle: '@sandro-zentien', href: 'https://github.com/sandro-zentien' },
-              { label: 'LinkedIn', handle: 'in/sandrodev', href: 'https://linkedin.com/in/sandrodev' },
-              { label: 'Twitter / X', handle: '@sandro_delvalle', href: 'https://x.com/sandro_delvalle' },
+              { label: 'GitHub',     handle: '@sandro-zentien',    href: 'https://github.com/sandro-zentien'  },
+              { label: 'LinkedIn',   handle: 'in/sandrodev',       href: 'https://linkedin.com/in/sandrodev'  },
+              { label: 'Twitter / X', handle: '@sandro_delvalle',  href: 'https://x.com/sandro_delvalle'      },
             ].map((social) => (
               <a
                 key={social.label}
@@ -220,10 +223,10 @@ export default function Contact() {
       {/* Footer */}
       <div className="max-w-4xl mx-auto mt-24 pt-6 border-t border-white/5 flex items-center justify-between flex-wrap gap-3">
         <span className="font-mono text-[9px] tracking-[0.18em] text-electric/25">
-          © 2025 SANDRO del VALLE
+          {tx.footer1}
         </span>
         <span className="font-mono text-[9px] tracking-[0.18em] text-electric/25">
-          DESIGNED IN LA :: BUILT IN REACT
+          {tx.footer2}
         </span>
       </div>
     </section>

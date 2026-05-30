@@ -1,6 +1,10 @@
 import { useEffect, useRef } from 'react'
+import { useLanguage } from '../context/LanguageContext'
+import { t } from '../translations'
 
 export default function Hero() {
+  const { lang } = useLanguage()
+  const tx = t[lang].hero
   const canvasRef = useRef(null)
 
   useEffect(() => {
@@ -110,7 +114,7 @@ export default function Hero() {
         <div className="flex items-center gap-4 mb-10 fade-up visible" style={{ transitionDelay: '0ms' }}>
           <span className="h-px w-10 bg-electric/30" />
           <span className="font-mono text-[10px] tracking-[0.2em] text-electric/50">
-            DIAGNOSTIC :: IDENTITY_VERIFIED
+            {tx.hud}
           </span>
           <span className="h-px w-10 bg-electric/30" />
         </div>
@@ -125,12 +129,12 @@ export default function Hero() {
 
         {/* Tagline */}
         <p className="font-mono text-[clamp(0.75rem,2vw,1rem)] tracking-[0.3em] uppercase text-electric/80 mb-14">
-          Engineer.&nbsp;&nbsp;Founder.&nbsp;&nbsp;Builder.
+          {tx.tagline}
         </p>
 
         {/* CTA */}
         <a href="#projects" className="glass-btn">
-          <span>View My Work</span>
+          <span>{tx.cta}</span>
           <svg
             width="14"
             height="14"
@@ -154,14 +158,14 @@ export default function Hero() {
             LAT 34.0522° N · LON 118.2437° W
           </span>
           <span className="font-mono text-[9px] tracking-[0.18em] text-electric/25 hidden sm:block">
-            SYS_STATUS :: ONLINE
+            {tx.status}
           </span>
         </div>
       </div>
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
-        <span className="font-mono text-[9px] tracking-[0.2em] text-electric/60">SCROLL</span>
+        <span className="font-mono text-[9px] tracking-[0.2em] text-electric/60">{tx.scroll}</span>
         <div className="w-px h-8 bg-gradient-to-b from-electric/50 to-transparent" />
       </div>
     </section>
